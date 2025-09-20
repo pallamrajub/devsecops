@@ -57,7 +57,7 @@ data "aws_ami" "amazon_linux" {
 
   filter {
     name   = "name"
-    values = ["*al2023-ami-2023.6.*-kernel-6.1-x86_64*"]
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
   }
 
   filter {
@@ -117,11 +117,12 @@ EOF
 }
 
 resource "aws_instance" "web" {
-  ami             = "ami-02f617729751b375a"
+  ami             = "ami-0886832e6b5c3b9e2"
   instance_type   = "t2.medium" 
+  subnet_id = "subnet-05a0d87296daa6bfe"
   key_name        = var.key_name
   iam_instance_profile = "${aws_iam_instance_profile.test_profile.name}"
-  security_groups = [aws_security_group.jenkins_sg.name]
+  security_groups = [aws_security_group.jenkins_sg.id]
   user_data       = "${file("install_jenkins.sh")}"
   tags = {
     Name = "Jenkins"
